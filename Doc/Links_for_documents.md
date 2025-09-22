@@ -5,7 +5,6 @@ Verification Plan:
 [Verification Plan](https://docs.google.com/spreadsheets/d/188fdMfByMLnHeKV7XGv4xakJVZai2DQI3tHsyYRAlg4/edit?gid=1452933306#gid=1452933306)
 
 Coverage Plan:                                                                                                                                                          
-
 [Coverage Plan](https://docs.google.com/spreadsheets/d/17uiRJopjNXuRvqKVP5CTvfX1NX_q_eNxINmsPG79QnQ/edit?usp=sharing)
 
 Asssertion Plan:                                                                                                                                                            
