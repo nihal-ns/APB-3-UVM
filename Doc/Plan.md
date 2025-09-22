@@ -6,7 +6,7 @@ Verification Plan:
 
 Coverage Plan:                                                                                                                                                          
 
-[Link]
+[Coverage Plan](https://docs.google.com/spreadsheets/d/17uiRJopjNXuRvqKVP5CTvfX1NX_q_eNxINmsPG79QnQ/edit?usp=sharing)
 
 Asssertion Plan:                                                                                                                                                            
-[Link]
+[Assertion Plan](https://docs.google.com/spreadsheets/d/1d5Tj1ICh6-vMW4PAUl3bnezKJtft_KfwZ5JOfXu_ze4/edit?usp=sharing)
