@@ -12,7 +12,7 @@ class apb_scoreboard extends uvm_scoreboard;
 
   virtual apb_intf vif;
   bit [7:0] wmem [511:0];
-  
+
   static int pass_count;
   static int fail_count;
 
@@ -39,14 +39,14 @@ class apb_scoreboard extends uvm_scoreboard;
     `uvm_info(get_type_name(), "Received output packet ", UVM_DEBUG)
     mon_pass_packet_q.push_back(pkt);
   endfunction: write_mon_pass
-  
+
   virtual task run_phase(uvm_phase phase);
     apb_seq_item act_item;
     apb_seq_item pass_item;
 
     forever begin
-      fork 
-        begin 
+      fork
+        begin
           wait(mon_act_packet_q.size()>0);
           act_item  = mon_act_packet_q.pop_front();
           //$display("enter");
@@ -60,12 +60,14 @@ class apb_scoreboard extends uvm_scoreboard;
 
       if(act_item.READ_WRITE == 0) begin
         wmem[act_item.apb_write_paddr] = act_item.apb_write_data;
+        `uvm_info("SCB", $sformatf("WRITE OPERATION | WRITE DATA : %0d | WRITE ADDR : %0d", act_item.apb_write_data, act_item.apb_write_paddr), UVM_NONE)
       end
       else begin
         $display("");
         $display("-------------------------------------------------------------------------------------------------------------------------------------------------");
+        `uvm_info("SCB", $sformatf("WRITE ADDR : %0d | READ ADDR : %0d", act_item.apb_write_paddr, act_item.apb_read_paddr), UVM_NONE)
         if(pass_item.apb_read_data_out == wmem[act_item.apb_read_paddr])begin
-          pass_count++; 
+          pass_count++;
           if(act_item.apb_read_paddr[8] == 0) begin
 
             `uvm_info("SCB", $sformatf("READING FROM SLAVE 0 PASSED"), UVM_NONE)
@@ -92,14 +94,13 @@ class apb_scoreboard extends uvm_scoreboard;
       $display("---------------------------------------------------------------------------------------------------------------------------------------------------");
     end
   endtask: run_phase
-  
+
   function void extract_phase(uvm_phase phase);
     super.extract_phase(phase);
     $display("");
     `uvm_info("SCB", $sformatf("TOTAL PASS : %0d", pass_count), UVM_NONE)
     `uvm_info("SCB", $sformatf("TOTAL FAIL : %0d", fail_count), UVM_NONE)
+    `uvm_info("SCB", $sformatf("TOTAL CASES : %0d", fail_count+pass_count), UVM_NONE)
     $display("");
-  endfunction
+  endfunction: extract_phase
 endclass: apb_scoreboard
- 
- 
