@@ -58,38 +58,45 @@ A `Makefile` is provided to simplify the compilation and simulation process.
 
 The following commands can be run from your terminal in the project's **root directory**.
 
+#### UVM Simulation
+
 1.  **Run the default simulation:**
-    This compiles the design and runs the default test (`apb_test`) with normal verbosity.
+    This compiles and runs the default test (`apb_test`) with normal verbosity.
+    ```sh
+    make simulate
+    ```
+    or simply:
     ```sh
     make
     ```
 
-2.  **Run a specific test:**
-    You can specify which test to run by setting the `test` variable.
+2.  **Run a specific test and change verbosity:**
+    You can combine targets to run a specific test with a desired verbosity level (`h` for HIGH, `d` for DEBUG).
     ```sh
-    make test=<test_name>
+    make h test=<test_name>
     ```
-    *Example:* `make test=write_read_test`
+    *Example:* `make h test=write_read_test`
 
-3.  **Change UVM Verbosity:**
-    You can run any test with a higher verbosity level using the `h` (HIGH) and `d` (DEBUG) targets.
-    * For high verbosity:
-        ```sh
-        make h
-        ```
-    * For debug verbosity (maximum output):
-        ```sh
-        make d
-        ```
+#### Functional Coverage
 
-4.  **Combine Test Selection and Verbosity:**
-    You can specify a test and a verbosity level in the same command.
+1.  **Generate a Coverage Report:**
+    This command compiles for coverage, runs the default test, and generates a detailed HTML report.
     ```sh
-    make h test=write_read_test
+    make cov
     ```
 
-5.  **Clean up generated files:**
-    This command removes the `work` directory, log files, and waveform files.
+2.  **Generate a Coverage Report for a specific test:**
+    You can also run the coverage flow on a specific test.
+    ```sh
+    make cov test=<test_name>
+    ```
+    After the command finishes, you can find the report in the **`covReport/`** directory.
+
+#### Cleaning Up
+
+1.  **Clean all generated files:**
+    This command removes all simulation and coverage files, including the `work` directory, logs, and the coverage report.
     ```sh
     make clean
     ```
+
