@@ -83,3 +83,63 @@ class write_override extends uvm_sequence#(apb_seq_item);
   `uvm_do_with(req,{req.READ_WRITE == 1; req.apb_read_paddr == read_addr;req.transfer == 1;})
   endtask: body
 endclass: write_override
+
+class wr_rd_ov extends uvm_sequence#(apb_seq_item);
+ `uvm_object_utils(wr_rd_ov)
+
+  bit [8:0]read_addr;
+ function new(string name = "wr_rd_ov");
+  super.new(name);
+ endfunction
+
+ virtual task body();
+  repeat(3) begin
+    `uvm_do_with(req,{req.READ_WRITE==0; req.transfer==1; req.apb_write_paddr == 40;})
+     read_addr = req.apb_write_paddr;
+  end
+ repeat(4) begin
+ `uvm_do_with(req,{req.READ_WRITE==1; req.transfer==1; req.apb_read_paddr == read_addr;})
+ end
+ endtask
+
+endclass : wr_rd_ov
+
+class random_write extends uvm_sequence#(apb_seq_item);
+ `uvm_object_utils(random_write)
+
+  function new(string name ="random_write");
+    super.new(name);
+  endfunction: new
+
+ task body();
+  repeat(3) begin
+  //Selecting the random slave, random address, random wdata
+  `uvm_do_with(req,{req.READ_WRITE == 0; req.transfer == 1;})
+  //Selecting a slave and randomising the addr and write data
+  // slave 1 is selected
+  `uvm_do_with(req,{req.READ_WRITE == 0; req.transfer == 1; req.apb_write_paddr[8] == 1;})
+  end
+ endtask: body
+endclass: random_write
+
+class regression extends uvm_sequence#(apb_seq_item);
+  `uvm_object_utils(regression)
+  wrd_sequence wrd_sequence_h;
+  write_read write_read_h;
+  wr_rd_ov wr_rd_ov_h;
+  random_write random_write_h;
+
+  function new(string name ="regression");
+    super.new(name);
+  endfunction: new
+
+  task body();
+    repeat(2) begin
+ `uvm_do(wrd_sequence_h)
+ `uvm_do(write_read_h)
+ `uvm_do(wr_rd_ov_h)
+ `uvm_do(random_write_h)
+    end
+  endtask : body
+
+endclass : regression
