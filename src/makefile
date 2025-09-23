@@ -1,45 +1,46 @@
-# --- Variables ---
+# --- UVM Variables ---
 FILE ?= top.sv
 TOP  ?= top
 test ?= apb_test  # Default test name, can be overridden from the command line
 
+# --- Coverage Variables ---
+COV_LOG_FILE   ?= apb_log.log
+COV_DB_FILE    ?= coverage.ucdb
+COV_REPORT_DIR ?= covReport
+
 # --- Simulation Options ---
-# This section sets the simulation flags.
 VERBOSITY ?= NORMAL
 VSIM_EXTRA_OPTS =
 
 # Set verbosity based on the VERBOSITY variable
 ifeq ($(VERBOSITY), HIGH)
- VSIM_EXTRA_OPTS += +UVM_VERBOSITY=UVM_HIGH
+    VSIM_EXTRA_OPTS += +UVM_VERBOSITY=UVM_HIGH
 endif
 ifeq ($(VERBOSITY), DEBUG)
- VSIM_EXTRA_OPTS += +UVM_VERBOSITY=UVM_DEBUG
+    VSIM_EXTRA_OPTS += +UVM_VERBOSITY=UVM_DEBUG
 endif
 
-# Set the testname if the TEST variable is provided
+# Set the testname if the test variable is provided
 ifneq ($(test),)
- VSIM_EXTRA_OPTS += +UVM_TESTNAME=$(test)
+    VSIM_EXTRA_OPTS += +UVM_TESTNAME=$(test)
 endif
 
 
-# --- Targets ---
-.PHONY: all compile simulate clean h d
+# --- Main Targets ---
+.PHONY: all compile simulate clean h d coverage compile_cov simulate_cov report_cov
 
-# Default target runs a normal simulation
+# Default target runs a normal UVM simulation
 all: simulate
 
 # --- Shortcut Targets ---
-# make      - executes normally
-# make h    - executes with VERBOSITY=HIGH
-# make d    - executes with VERBOSITY=DEBUG
 h:
  @$(MAKE) --no-print-directory simulate VERBOSITY=HIGH
 
 d:
  @$(MAKE) --no-print-directory simulate VERBOSITY=DEBUG
- # --- End of Shortcut Targets ---
+# --- End of Shortcut Targets ---
 
-
+# --- UVM Simulation Targets ---
 compile:
  @vlog -sv apb_pkg.sv $(FILE)
 
@@ -47,5 +48,12 @@ simulate: compile
  @echo "--- Running Simulation (Verbosity: $(VERBOSITY), Test: $(test)) ---"
  @vsim -c $(TOP) $(VSIM_EXTRA_OPTS) -do "run -all ; quit"
 
+# --- Coverage Targets ---
+cov: 
+    @vlog -sv +acc +cover +fcover -l $(COV_LOG_FILE) apb_pkg.sv $(FILE)
+    @vsim -vopt work.$(TOP) -voptargs=+acc=npr -assertdebug -l simulation.log -coverage -c -do "coverage save -onexit -assert -directive -cvg -codeAll coverage.ucdb; run -all; exit"
+    @vcover report -html $(COV_DB_FILE) -htmldir $(COV_REPORT_DIR) -details
+
+# --- Clean Target ---
 clean:
- @rm -rf transcript vsim.wlf work *.log
+ @rm -rf transcript vsim.wlf work *.log $(COV_LOG_FILE) $(COV_DB_FILE) $(COV_REPORT_DIR)
