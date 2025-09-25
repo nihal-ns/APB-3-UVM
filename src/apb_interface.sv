@@ -2,10 +2,10 @@ interface apb_intf (input bit PCLK, PRESETn); //Global signals
   
   bit READ_WRITE;
   bit transfer;  
-  bit [8:0] apb_write_paddr;
-  bit [8:0] apb_read_paddr;
+  logic [8:0] apb_write_paddr;
+  logic [8:0] apb_read_paddr;
+  logic [7:0] apb_write_data;
   
-  bit [7:0] apb_write_data;
   bit [7:0] apb_read_data_out;
   bit PSLVERR;
 
