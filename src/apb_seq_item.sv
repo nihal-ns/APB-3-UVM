@@ -2,12 +2,12 @@ class apb_seq_item extends uvm_sequence_item;
   
   rand bit READ_WRITE;
   
-  rand bit [8:0] apb_write_paddr;
-  rand bit [8:0] apb_read_paddr;
+  rand logic [8:0] apb_write_paddr;
+  rand logic [8:0] apb_read_paddr;
   rand bit transfer;
-  rand bit [7:0] apb_write_data;
+  rand logic [7:0] apb_write_data;
 
-  bit [7:0] apb_read_data_out;
+  logic [7:0] apb_read_data_out;
   bit PSLVERR;
 
   `uvm_object_utils_begin(apb_seq_item)
