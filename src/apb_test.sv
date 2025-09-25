@@ -30,7 +30,7 @@ class wrd_sequence_test extends apb_test;
   function new(string name = "wrd_sequence_test", uvm_component parent = null);
     super.new(name, parent);
   endfunction: new
-  
+
   task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     seq = wrd_sequence::type_id::create("seq",this);
@@ -49,7 +49,7 @@ class write_read_test extends apb_test;
   function new(string name = "write_read_test", uvm_component parent = null);
     super.new(name, parent);
   endfunction: new
-  
+
   task run_phase(uvm_phase phase);
     phase.raise_objection(this);
     seq = write_read::type_id::create("seq",this);
@@ -76,7 +76,7 @@ class wr_rd_ov_test extends apb_test;
     phase.drop_objection(this);
   endtask
 
-endclass : wr_rd_ov_test 
+endclass : wr_rd_ov_test
 //////////////////////////////////////////////////////////////
 class random_write_test extends apb_test;
   `uvm_component_utils(random_write_test)
@@ -94,7 +94,24 @@ class random_write_test extends apb_test;
   endtask
 
 endclass : random_write_test
-/////////////////////////////////////////////////////////
+//////////////////////////////////////
+class error_write_test extends apb_test;
+  `uvm_component_utils(error_write_test)
+  error_write seq;
+
+  function new(string name = "error_write_test", uvm_component parent = null);
+    super.new(name, parent);
+  endfunction: new
+
+  task run_phase(uvm_phase phase);
+    phase.raise_objection(this);
+    seq = error_write::type_id::create("seq", this);
+    seq.start(env.agt_act.seqr);
+    phase.drop_objection(this);
+  endtask
+
+endclass : error_write_test
+////////////////////////////////////////////////////////
 class regression_test extends apb_test;
   `uvm_component_utils(regression_test)
   regression seq;
@@ -110,5 +127,3 @@ class regression_test extends apb_test;
     phase.drop_objection(this);
   endtask
 endclass : regression_test
-
- 
