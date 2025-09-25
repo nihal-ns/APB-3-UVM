@@ -22,6 +22,17 @@ The testbench architecture follows a standard UVM structure, promoting modularit
 ## Directory Structure
 ```
 /
+├── Design files/
+│   ├── new/
+│   │   ├── apbtop.v
+│   │   ├── master.v
+│   │   ├── slave1.v
+│   │   └── slave2.v
+│   └── old/
+│       ├── apbtop.v
+│       ├── master.v
+│       ├── slave1.v
+│       └── slave2.v
 ├── Doc/
 │   └── Links_for_documents.md
 ├── src/
@@ -38,12 +49,7 @@ The testbench architecture follows a standard UVM structure, promoting modularit
 │   ├── apb_sequence.sv
 │   ├── apb_sequencer.sv
 │   ├── apb_test.sv
-│   ├── apbtop.v
-│   ├── makefile
-│   ├── master.v
-│   ├── slave1.v
-│   ├── slave2.v
-│   └── top.sv
+│   └── makefile
 └── README.md
 ```
 ## How to Run Simulation
